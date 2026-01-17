@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apply for Loans - CreditBazaar</title>
+    <title>CreditBazaar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -17,38 +17,41 @@
     </style>
 </head>
 
-<body class="bg-gray-50">
+<body>
     <div id="root"></div>
 
     {% raw %}
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        const Navbar = () => {
+        const Logo = () => (
+            <div className="flex items-center">
+                <img src="/static/logo.png" alt="CreditBazaar" className="h-16" />
+            </div>
+        );
+
+
+
+        const Navbar = ({ onSignInClick }) => {
             const menuItems = [
                 { name: "Home", link: "/" },
                 { name: "Loans", link: "/loans" },
                 { name: "Credit Cards", link: "/creditcards" },
                 { name: "Calculators", link: "/calculators" }
             ];
-
             return (
                 <nav className="bg-white shadow-md sticky top-0 z-50">
                     <div className="mx-2 md:mx-8 lg:mx-16 py-3 flex items-center justify-between">
-                        <div className="flex items-center">
-                            <a href="/" className="flex items-center gap-2">
-                                <img src="/static/logo.png" alt="CreditBazaar" className="h-16" />
-                            </a>
-                        </div>
+                        <Logo />
                         <div className="flex items-center gap-4">
                             <div className="hidden lg:flex items-center gap-6">
                                 {menuItems.map((item) => (
-                                    <a key={item.name} href={item.link} className={`font-semibold text-sm cursor-pointer flex items-center gap-1 transition-colors ${item.name === "Loans" ? "text-blue-600" : "text-gray-700 hover:text-blue-600"}`}>
+                                    <a key={item.name} href={item.link} className={`font-semibold text-sm cursor-pointer flex items-center gap-1 transition-colors ${item.name === "Home" ? "text-blue-600" : "text-gray-700 hover:text-blue-600"}`}>
                                         {item.name}
                                     </a>
                                 ))}
                             </div>
-                            <button className="text-blue-600 font-bold text-sm border border-blue-600 px-5 py-2 rounded hover:bg-blue-50 transition">
+                            <button onClick={onSignInClick} className="text-blue-600 font-bold text-sm border border-blue-600 px-5 py-2 rounded hover:bg-blue-50 transition">
                                 Sign In
                             </button>
                         </div>
@@ -57,196 +60,334 @@
             );
         };
 
-        const LoanForm = () => {
-            const [formData, setFormData] = useState({
-                customer_name: '',
-                email: '',
-                contact_no: '',
-                company_name: '',
-                annual_salary: '',
-                loan_type: '',
-                salary_mode: '',
-                pincode: ''
-            });
-
-            const handleChange = (e) => {
-                const { name, value } = e.target;
-                setFormData(prev => ({ ...prev, [name]: value }));
-            };
-
-            const handleSubmit = async (e) => {
-                e.preventDefault();
-                try {
-                    const response = await fetch('/api/apply-loan', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(formData),
-                    });
-                    const result = await response.json();
-                    if (response.ok) {
-                        alert('Application Submitted Successfully!');
-                        setFormData({
-                            customer_name: '', email: '', contact_no: '', company_name: '',
-                            annual_salary: '', loan_type: '', salary_mode: '', pincode: ''
-                        });
-                    } else {
-                        alert('Error: ' + result.error);
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Failed to submit application.');
-                }
-            };
-
-            return (
-                <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                    <h2 className="text-2xl font-bold text-[#052F5F] mb-6">Unlock Your Dreams with the Right Loan</h2>
-                    <form className="space-y-5" onSubmit={handleSubmit}>
-                        <div className="space-y-1">
-                            <label className="text-sm font-semibold text-gray-700">Customer Name</label>
-                            <input
-                                type="text"
-                                name="customer_name"
-                                value={formData.customer_name}
-                                onChange={handleChange}
-                                placeholder="Enter your full name"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                required
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div className="space-y-1">
-                                <label className="text-sm font-semibold text-gray-700">Email ID</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="name@example.com"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-sm font-semibold text-gray-700">Contact No</label>
-                                <input
-                                    type="tel"
-                                    name="contact_no"
-                                    value={formData.contact_no}
-                                    onChange={handleChange}
-                                    placeholder="Mobile Number"
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="text-sm font-semibold text-gray-700">Company Name</label>
-                            <input
-                                type="text"
-                                name="company_name"
-                                value={formData.company_name}
-                                onChange={handleChange}
-                                placeholder="Current Employer Name"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                            />
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="text-sm font-semibold text-gray-700">Annual Salary</label>
-                            <select
-                                name="annual_salary"
-                                value={formData.annual_salary}
-                                onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white cursor-pointer"
-                                required
-                            >
-                                <option value="">Select Salary Range</option>
-                                <option value="Below 3 Lakhs">Below ₹3 Lakhs</option>
-                                <option value="3 Lakhs - 5 Lakhs">₹3 Lakhs - ₹5 Lakhs</option>
-                                <option value="5 Lakhs - 10 Lakhs">₹5 Lakhs - ₹10 Lakhs</option>
-                                <option value="Above 10 Lakhs">Above ₹10 Lakhs</option>
-                            </select>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div className="space-y-1">
-                                <label className="text-sm font-semibold text-gray-700">Loan Type</label>
-                                <select
-                                    name="loan_type"
-                                    value={formData.loan_type}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white cursor-pointer"
-                                    required
-                                >
-                                    <option value="">Select Type</option>
-                                    <option value="Personal loan">Personal Loan</option>
-                                    <option value="Business loan">Business Loan</option>
-                                    <option value="Home Loan">Home Loan</option>
-                                    <option value="Transfer Loan">Transfer Loan</option>
-                                    <option value="Overdraft Facility">Overdraft Facility</option>
-                                </select>
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-sm font-semibold text-gray-700">Mode of Salary</label>
-                                <select
-                                    name="salary_mode"
-                                    value={formData.salary_mode}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white cursor-pointer"
-                                    required
-                                >
-                                    <option value="">Select Mode</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="Bank Transfer">Bank Transfer</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="space-y-1">
-                            <label className="text-sm font-semibold text-gray-700">Pin Code</label>
-                            <input
-                                type="number"
-                                name="pincode"
-                                value={formData.pincode}
-                                onChange={handleChange}
-                                placeholder="Six Digit Pin Code"
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                                required
-                            />
-                        </div>
-
-                        <div className="flex items-start gap-3 pt-2">
-                            <input type="checkbox" id="consent" className="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-gray-300 cursor-pointer" required />
-                            <label htmlFor="consent" className="text-xs text-gray-500 cursor-pointer">
-                                I authorize CreditBazaar and its partner banks/NBFCs to contact me for personal loan offers.
-                            </label>
-                        </div>
-
-                        <button type="submit" className="w-full bg-[#FF6F3C] text-white font-bold py-4 rounded-lg hover:bg-[#ff8a5e] transition shadow-lg transform hover:scale-[1.01] uppercase tracking-wide text-sm">
-                            Proceed to Apply
-                        </button>
-                    </form>
-                </div>
-            );
-        }
-
-        const FloatingContactWidget = ({ isOpen, setIsOpen, hasBeenClosed, setHasBeenClosed }) => {
-
+        const ImageSlider = () => {
+            const images = [
+                "/static/1.png",
+                "/static/2.png",
+                "/static/3.png"
+            ];
+            const [currentIndex, setCurrentIndex] = useState(0);
 
             useEffect(() => {
-                const timer = setTimeout(() => {
-                    if (!hasBeenClosed) {
-                        setIsOpen(false);
-                        setHasBeenClosed(true);
-                    }
-                }, 2000);
-                return () => clearTimeout(timer);
+                const timer = setInterval(() => {
+                    setCurrentIndex((prev) => (prev + 1) % images.length);
+                }, 3000);
+                return () => clearInterval(timer);
             }, []);
+
+            return (
+                <div className="rounded-3xl shadow-lg">
+                    <a href="/loans" className="block w-full h-full relative cursor-pointer group">
+                        <div className="relative w-full aspect-[2.16/1] rounded-3xl overflow-hidden">
+                            {images.map((img, index) => (
+                                <div
+                                    key={index}
+                                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? "opacity-100" : "opacity-0"
+                                        }`}
+                                >
+                                    <img
+                                        src={img}
+                                        alt={`Slide ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            ))}
+                            {/* Navigation dots */}
+                            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                                {images.map((_, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setCurrentIndex(idx);
+                                        }}
+                                        className={`w-2 h-2 rounded-full transition-all shadow-sm border border-white/50 ${idx === currentIndex ? "bg-blue-600 w-6" : "bg-gray-300"
+                                            }`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            );
+        };
+
+        const Hero = ({ onTalkToExpert }) => (
+            <div className="bg-white py-12 md:py-20 relative overflow-hidden">
+                {/* Background decorative elements */}
+                <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-50 to-transparent opacity-50 z-0 pointer-events-none"></div>
+
+                <div className="mx-2 md:mx-8 lg:mx-16 flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
+                    <div className="md:w-1/2 space-y-8">
+                        <div>
+                            <h1 className="text-4xl md:text-6xl font-bold text-[#052F5F] leading-tight mt-2">
+                                Financial Wellness starts with the <span className="text-blue-600">Right Advice</span>.
+                            </h1>
+                        </div>
+                        <p className="text-gray-600 text-lg md:max-w-xl leading-relaxed">We aren't just a platform; we’re your partner in making healthier financial choices. Compare, choose, and apply for the best financial products.</p>
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <a href="#services" className="bg-blue-600 text-center text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition shadow-lg transition transform hover:-translate-y-0.5 inline-block">
+                                View Services
+                            </a>
+                            <button onClick={onTalkToExpert} className="bg-white text-blue-600 border-2 border-blue-600 font-bold py-3 px-8 rounded-lg hover:bg-blue-50 transition">
+                                Talk to Expert
+                            </button>
+                        </div>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600 text-sm mt-4">
+                            <li className="flex items-center gap-2">
+                                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                Unbiased Education
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                100% Digital Process
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                Tailored for You
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                Data Security
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className="md:w-[450px] w-full mt-10 md:mt-0">
+                        <ImageSlider />
+                    </div>
+                </div>
+            </div>
+        );
+
+        const AboutPromise = () => (
+            <div className="py-16 bg-blue-50">
+                <div className="mx-2 md:mx-8 lg:mx-16 text-center">
+                    <h2 className="text-3xl lg:text-4xl font-bold text-[#052F5F] mb-6">Simple Lending. Smart Solutions.</h2>
+                    <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+                        We believe that accessing funds shouldn't be a struggle. We cut through the red tape to offer loan solutions that are straightforward and quick. Our mission is to empower your financial decisions with competitive interest rates and flexible repayment tenures.
+                    </p>
+                </div>
+            </div>
+        );
+
+        const ServicesGrid = () => {
+            const products = [
+                {
+                    title: "Personal Loan",
+                    headline: "Funds for Whatever Life Throws at You.",
+                    copy: "Unplanned expenses? Dream vacation? Medical emergency? Our Personal Loans are unsecured, meaning no collateral is needed. Get instant approval with minimal documentation and use the funds for absolutely any purpose.",
+                    features: ["Quick Disbursal", "No Collateral", "Flexible Tenure (12–60 months)"],
+                    image: "/static/personal_loan.png",
+                    link: "/loans"
+                },
+                {
+                    title: "Home Loan",
+                    headline: "Open the Door to Your Dream Home.",
+                    copy: "Stop renting and start owning. Whether you are buying a ready-to-move apartment, constructing a house, or renovating your current space, our Home Loans offer attractive interest rates and longer repayment periods to make your EMI affordable.",
+                    features: ["High Loan-to-Value Ratio", "Tax Benefits", "Doorstep Service"],
+                    image: "/static/home_loan.png",
+                    link: "/loans"
+                },
+                {
+                    title: "Business Loan",
+                    headline: "Capital to Scale Your Ambitions.",
+                    copy: "Every business needs fuel to grow. Whether you need working capital, funds for new machinery, or cash for expansion, our Business Loans are designed to keep your operations running smoothly without disrupting your cash flow.",
+                    features: ["Customized Limits", "Minimal Paperwork", "Tailored for SMEs and Enterprises"],
+                    image: "/static/business_loan.png",
+                    link: "/loans"
+                },
+                {
+                    title: "Transfer Loan (Balance Transfer)",
+                    headline: "Switch to Lower Rates. Save More.",
+                    copy: "Burdened by high-interest rates on your existing loans? Move your outstanding loan balance to us. Our Balance Transfer facility helps you reduce your monthly EMIs and interest outflow, giving you better control over your finances.",
+                    features: ["Lower Interest Rates", "Top-up Loan Facility Available", "Simple Process"],
+                    image: "/static/transfer_loan.png",
+                    link: "/loans"
+                },
+                {
+                    title: "Overdraft Facility",
+                    headline: "Pay Interest Only on What You Use.",
+                    copy: "Need liquidity without the pressure of a fixed EMI? Our Overdraft facility gives you a credit limit against your assets or salary. Withdraw what you need, when you need it, and pay interest only on the utilized amount, not the total limit.",
+                    features: ["Instant Liquidity", "Interest Saving", "Revolving Credit"],
+                    image: "/static/overdraft.png",
+                    link: "/loans"
+                },
+                {
+                    title: "Credit Card",
+                    headline: "Swipe Smart. Earn More.",
+                    copy: "Experience the power of premium credit cards with exclusive rewards, cashback, and lifestyle benefits. Choose from a wide range of cards tailored to your spending habits.",
+                    features: ["Lifetime Free Options", "Cashback & Rewards", "Airport Lounge Access"],
+                    image: "/static/credit_card.png",
+                    link: "/creditcards"
+                }
+            ];
+
+            return (
+                <div id="services" className="py-16 bg-white relative">
+                    <div className="mx-2 md:mx-8 lg:mx-16 relative z-10">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl font-bold text-gray-800 mb-3">Our Services</h2>
+                            <p className="text-gray-500">Tailored financial solutions for every need.</p>
+                            <div className="h-1 w-16 bg-blue-600 mx-auto rounded mt-4"></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {products.map((product, idx) => (
+                                <div key={idx} className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition duration-300 group flex flex-col h-full">
+                                    <div className="h-56 overflow-hidden relative">
+                                        <img
+                                            src={product.image}
+                                            alt={product.title}
+                                            className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
+                                        <h3 className="absolute bottom-4 left-4 text-white text-2xl font-bold shadow-sm">{product.title}</h3>
+                                    </div>
+                                    <div className="p-6 flex flex-col flex-grow">
+                                        <h4 className="font-bold text-[#052F5F] text-lg mb-3 leading-tight">{product.headline}</h4>
+                                        <p className="text-gray-600 text-sm mb-4 leading-relaxed flex-grow">{product.copy}</p>
+                                        <div className="mb-6">
+                                            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Key Features</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {product.features.map((feature, i) => (
+                                                    <span key={i} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium border border-blue-100">
+                                                        {feature}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <a href={product.link} className="w-full bg-white text-blue-600 border border-blue-600 font-bold py-3 rounded-lg hover:bg-blue-600 hover:text-white transition duration-300 flex items-center justify-center gap-2 group-hover:bg-blue-600 group-hover:text-white">
+                                            Apply Now
+                                            <svg className="w-4 h-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const CreditScoreBanner = () => (
+            <div className="bg-[#052F5F] py-12 md:py-16 text-white overflow-hidden relative">
+                {/* Decorative circles */}
+                <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 translate-y-1/2"></div>
+
+                <div className="mx-2 md:mx-8 lg:mx-16 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Your Credit Score & Report</h2>
+                        <p className="text-blue-200 text-lg mb-6 max-w-xl">
+                            Get your free credit report with monthly updates. Check your credit score now to get the best loan and card offers.
+                        </p>
+                        <ul className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-8 text-sm text-blue-100 font-semibold">
+                            <li className="flex items-center gap-2"><div className="w-2 h-2 bg-green-400 rounded-full"></div> Lifetime Free</li>
+                            <li className="flex items-center gap-2"><div className="w-2 h-2 bg-green-400 rounded-full"></div> Detailed Analysis</li>
+                            <li className="flex items-center gap-2"><div className="w-2 h-2 bg-green-400 rounded-full"></div> Custom Tips</li>
+                        </ul>
+                    </div>
+                    <div className="flex-shrink-0">
+                        <button className="bg-[#FF6F3C] text-white font-bold py-3 px-10 rounded-full hover:bg-[#ff8a5e] transition shadow-lg transform hover:scale-105">
+                            Get Free Score
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        const Partners = () => {
+            const bankLogos = [
+                "Bajaj Finserv.png",
+                "Bandhan bank.png",
+                "Finnable.png",
+                "abfl.png",
+                "axis.png",
+                "hdfc png.png",
+                "icici.png",
+                "idfc.png",
+                "incred finance.png",
+                "kotak.png",
+                "l&t Finance.png",
+                "piramal.png",
+                "poonawaallah.png",
+                "smfg.png",
+                "tata.png",
+                "yes bank.png"
+            ];
+
+            return (
+                <div className="py-16 bg-white border-t border-gray-100">
+                    <div className="mx-2 md:mx-8 lg:mx-16">
+                        <div className="text-center mb-10">
+                            <h2 className="text-2xl font-bold text-gray-800">Our Partners</h2>
+                            <p className="text-gray-500 mt-2">Leading Banks & NBFCs trust us</p>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                            {bankLogos.map((logo, i) => (
+                                <div key={i} className="bg-white p-6 rounded-xl border border-gray-100 flex items-center justify-center hover:shadow-lg transition transform hover:-translate-y-1 group h-24 hover:border-blue-100 cursor-pointer relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-blue-50 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                                    <img
+                                        src={`/static/images/${logo}`}
+                                        alt="Bank Logo"
+                                        className="h-12 w-auto object-contain mix-blend-multiply filter contrast-125"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Testimonials = () => {
+            const reviews = [
+                {
+                    name: "Mukesh Singh Naruka",
+                    location: "Alwar",
+                    rating: 5,
+                    text: "I had a great experience with you as well CreditsBazaar.com for the disbursement of my personal loan. The entire process was smooth, quick, and handled with minimal queries, exactly as per my requirement. The team was supportive and professional throughout the process. I would definitely recommend Mr. Amit & CreditsBazaar.com for processing personal loan applications."
+                },
+                {
+                    name: "Kuppala Kirankumar",
+                    location: "Bangalore",
+                    rating: 5,
+                    text: "I recently took a loan from your company and had a very smooth experience throughout the process. The application and approval were quick, transparent, and hassle-free. Your staff was supportive and clearly explained all terms and conditions. The disbursement was timely, and the service exceeded my expectations."
+                },
+                {
+                    name: "Sumit Panchal",
+                    location: "Delhi",
+                    rating: 5,
+                    text: "My experience with CreditsBazaar.com for a personal loan was excellent. The entire process was fast, clear, and hassle-free. The team was helpful and highly professional. I would strongly recommend CreditsBazaar.com."
+                }
+            ];
+            return (
+                <div className="py-16 bg-white">
+                    <div className="mx-2 md:mx-8 lg:mx-16">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl font-bold text-gray-800 mb-2">What Our Customers Say</h2>
+                            <div className="h-1 w-16 bg-blue-600 mx-auto rounded"></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {reviews.map((review, i) => (
+                                <div key={i} className="bg-gray-50 p-8 rounded-xl relative hover:shadow-lg transition duration-300 flex flex-col h-full">
+                                    <div className="text-yellow-400 text-2xl mb-4">{"★".repeat(review.rating)}</div>
+                                    <p className="text-gray-600 italic mb-6 flex-grow leading-relaxed">"{review.text}"</p>
+                                    <div className="mt-auto">
+                                        <div className="font-bold text-[#052F5F] text-lg">{review.name}</div>
+                                        {review.location && (
+                                            <div className="text-sm text-gray-500">{review.location}</div>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const FloatingContactWidget = ({ isOpen, setIsOpen, hasBeenClosed, setHasBeenClosed }) => {
 
             const handleClose = () => {
                 setIsOpen(false);
@@ -263,6 +404,7 @@
                     onMouseLeave={() => hasBeenClosed && setIsOpen(false)}
                 >
                     <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-l-2xl shadow-2xl overflow-hidden" style={{ width: '320px' }}>
+                        {/* Header */}
                         <div className="bg-blue-800 px-6 py-4 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
@@ -286,10 +428,13 @@
                                 </button>
                             )}
                         </div>
+
+                        {/* Content */}
                         <div className="px-6 py-6">
                             <p className="text-sm mb-4 text-blue-50">
                                 Get instant assistance from our customer executives. We're here to help!
                             </p>
+
                             <div className="bg-white rounded-xl p-4 mb-4">
                                 <div className="flex items-center gap-3 mb-3">
                                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -302,6 +447,7 @@
                                         <p className="text-sm text-gray-800 font-bold">Available 24/7</p>
                                     </div>
                                 </div>
+
                                 <a
                                     href="tel:9625835453"
                                     className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition shadow-lg transform hover:scale-105 no-underline"
@@ -312,10 +458,13 @@
                                     9625835453
                                 </a>
                             </div>
+
                             <p className="text-xs text-blue-100 text-center">
                                 Call us for instant loan & credit card assistance
                             </p>
                         </div>
+
+                        {/* Side Tab (visible when minimized) */}
                         {!isOpen && hasBeenClosed && (
                             <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full bg-blue-600 text-white px-3 py-6 rounded-l-lg shadow-lg cursor-pointer">
                                 <div className="flex flex-col items-center gap-2">
@@ -333,154 +482,110 @@
             );
         };
 
+        const LoginModal = ({ isOpen, onClose }) => {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [error, setError] = useState('');
+            const [loading, setLoading] = useState(false);
 
-        const LoanHeroLower = () => {
-            return (
-                <div className="bg-white py-16 md:py-24 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-64 h-64 bg-orange-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
-                    <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-x-1/2 translate-y-1/2"></div>
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                setError('');
 
-                    <div className="mx-2 md:mx-8 lg:mx-16 relative z-10">
-                        <div className="flex flex-col lg:flex-row items-center gap-12">
-                            <div className="lg:w-1/2 space-y-6">
-                                <h2 className="text-3xl md:text-5xl font-bold text-[#052F5F] leading-tight">
-                                    Empowering Your Financial Journey with the <span className="text-blue-600">Right Capital</span>.
-                                </h2>
-                                <p className="text-lg text-gray-600 leading-relaxed">
-                                    Whether you are building a home, growing a business, or managing the unexpected—we provide fast, transparent, and flexible loan options tailored to your needs.
-                                </p>
+                try {
+                    const response = await fetch('/admin/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
 
-                                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                    <button
-                                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                                        className="bg-[#FF6F3C] text-white font-bold py-3 px-8 rounded-lg hover:bg-[#ff8a5e] transition shadow-lg transform hover:scale-[1.02]"
-                                    >
-                                        Apply Now
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="lg:w-1/2 w-full">
-                                <div className="relative rounded-2xl overflow-hidden shadow-2xl group">
-                                    <div className="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition duration-300 z-10"></div>
-                                    <img
-                                        src="https://placehold.co/1200x800/eff6ff/1e40af?text=Empowering+Your+Financial+Journey"
-                                        alt="Happy Family"
-                                        className="w-full h-auto object-cover transform group-hover:scale-105 transition duration-700"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
+                    const data = await response.json();
 
-        const DetailedServices = () => {
-            const services = [
-                {
-                    title: "1. Personal Loan",
-                    headline: "Funds for Life’s Unscripted Moments",
-                    subtext: "Don't let a lack of funds pause your life plans. Whether it's a dream wedding, a much-needed vacation, or a medical emergency, our Personal Loans provide you with unsecured capital quickly and with minimal paperwork.",
-                    features: [
-                        { title: "No Collateral Required", desc: "100% unsecured funding." },
-                        { title: "Quick Disbursal", desc: "Get funds in your account within 24–48 hours." },
-                        { title: "Flexible Tenure", desc: "Choose a repayment plan that fits your monthly budget." }
-                    ],
-                    image: "/static/personal_loan_service.png",
-                    direction: "ltr"
-                },
-                {
-                    title: "2. Home Loan",
-                    headline: "The Keys to Your Dream Home",
-                    subtext: "Stop renting and start owning. We offer competitive interest rates and high-value financing to help you buy, build, or renovate your sanctuary. We guide you through the paperwork so you can focus on the housewarming.",
-                    features: [
-                        { title: "High Loan-to-Value", desc: "Get funding for up to 90% of the property cost." },
-                        { title: "Longer Tenures", desc: "Repayment options spanning up to 30 years to lower your EMI." },
-                        { title: "Doorstep Service", desc: "We collect documents from your home or office." }
-                    ],
-                    image: "/static/home_loan_service.png",
-                    direction: "rtl"
-                },
-                {
-                    title: "3. Business Loan",
-                    headline: "Fuel for Your Enterprise",
-                    subtext: "Growth shouldn't wait. Whether you need working capital, machinery, or funds for expansion, our Business Loans are designed to keep your operations running smoothly without providing assets as security.",
-                    features: [
-                        { title: "Collateral-Free", desc: "Access funds based on your turnover and business health." },
-                        { title: "Customized Limits", desc: "Loan amounts tailored to your specific industry needs." },
-                        { title: "Tax Benefits", desc: "Interest paid is tax-deductible as a business expense." }
-                    ],
-                    image: "/static/business_loan_service.png",
-                    direction: "ltr"
-                },
-                {
-                    title: "4. Transfer Loan (Balance Transfer)",
-                    headline: "Switch to Lower Rates, Save More",
-                    subtext: "Stuck with a high-interest loan? Move your existing Personal or Home Loan to us. We reduce your interest burden and offer you a top-up facility for extra cash in hand.",
-                    features: [
-                        { title: "Reduce Your EMI", desc: "Instantly lower your monthly outflow with better rates." },
-                        { title: "Top-Up Facility", desc: "Get additional funds over and above your transferred amount." },
-                        { title: "Zero Hidden Charges", desc: "Transparent processing fees and foreclosure norms." }
-                    ],
-                    image: "/static/transfer_loan_service.png",
-                    direction: "rtl"
-                },
-                {
-                    title: "5. Overdraft Facility",
-                    headline: "Pay Only For What You Use",
-                    subtext: "Liquidity when you need it, zero cost when you don't. Our Overdraft facility links to your bank account, giving you a safety net for cash flow mismatches. You only pay interest on the amount you withdraw, not the total limit.",
-                    features: [
-                        { title: "Interest Saver", desc: "Interest is calculated daily only on the utilized amount." },
-                        { title: "Instant Liquidity", desc: "Withdraw and deposit funds anytime without penalties." },
-                        { title: "Revolving Credit", desc: "As you repay, your credit limit is restored instantly." }
-                    ],
-                    image: "/static/overdraft_service.png",
-                    direction: "ltr"
+                    if (response.ok && data.success) {
+                        window.location.href = data.redirect;
+                    } else {
+                        setError(data.error || 'Invalid credentials');
+                        setLoading(false);
+                    }
+                } catch (err) {
+                    setError('An error occurred. Please try again.');
+                    setLoading(false);
                 }
-            ];
+            };
+
+            if (!isOpen) return null;
 
             return (
-                <div className="bg-gray-50 py-16">
-                    <div className="mx-2 md:mx-8 lg:mx-16 space-y-24">
-                        {services.map((service, idx) => (
-                            <div key={idx} className={`flex flex-col ${service.direction === 'rtl' ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-12`}>
-                                <div className="lg:w-1/2 space-y-6">
-                                    <div className="inline-block bg-blue-100 text-blue-800 font-bold py-1 px-3 rounded-full text-sm mb-2">
-                                        {service.title}
-                                    </div>
-                                    <h3 className="text-3xl font-bold text-gray-900">{service.headline}</h3>
-                                    <p className="text-lg text-gray-600 leading-relaxed">
-                                        {service.subtext}
-                                    </p>
-                                    <div className="grid gap-6 mt-6">
-                                        {service.features.map((feature, fIdx) => (
-                                            <div key={fIdx} className="flex items-start gap-4">
-                                                <div className="flex-shrink-0 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-blue-600">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-bold text-gray-900 text-sm">{feature.title}</h4>
-                                                    <p className="text-gray-500 text-sm">{feature.desc}</p>
-                                                </div>
-                                            </div>
-                                        ))}
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] backdrop-blur-sm" onClick={onClose}>
+                    <div className="w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
+                        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                            {/* Header */}
+                            <div className="bg-gradient-to-r from-[#052F5F] to-blue-700 px-8 py-6 text-center relative">
+                                <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-blue-200 transition">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                                <div className="flex justify-center mb-3">
+                                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center">
+                                        <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                        </svg>
                                     </div>
                                 </div>
-                                <div className="lg:w-1/2 w-full">
-                                    <div className="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-500 bg-white p-2">
-                                        <div className="rounded-xl overflow-hidden">
-                                            <img
-                                                src={service.image}
-                                                alt={service.headline}
-                                                className="w-full h-auto object-cover hover:scale-105 transition duration-700"
-                                            />
+                                <h1 className="text-2xl font-bold text-white">Admin Login</h1>
+                                <p className="text-blue-100 text-sm mt-1">CreditBazaar Dashboard</p>
+                            </div>
+
+                            {/* Form */}
+                            <div className="px-8 py-8">
+                                {error && (
+                                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+                                        <div className="flex items-center gap-2">
+                                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"></path>
+                                            </svg>
+                                            <span>{error}</span>
                                         </div>
                                     </div>
-                                </div>
+                                )}
+
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                                        <input
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            required
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                                            placeholder="admin@creditbazaar.com"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                                        <input
+                                            type="password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+                                            placeholder="Enter your password"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 transition transform hover:scale-105 shadow-lg disabled:opacity-50"
+                                    >
+                                        {loading ? 'Logging in...' : 'Login to Dashboard'}
+                                    </button>
+                                </form>
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
             );
@@ -520,7 +625,7 @@
                         <div>
                             <h4 className="text-white font-bold mb-4 uppercase">Contact</h4>
                             <ul className="space-y-2">
-                                <li>support@paisabazaar.com</li>
+                                <li>amit@creditsbazaar.com</li>
                                 <li>9625835453</li>
                                 <li className="mt-4 flex gap-4">
                                     <span className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 cursor-pointer">f</span>
@@ -531,16 +636,17 @@
                         </div>
                     </div>
                     <div className="border-t border-gray-700 pt-8 text-center text-xs">
-                        <p>&copy; 2026 Paisabazaar.com. All Rights Reserved.</p>
+                        <p>&copy; 2026 Creditsbazaar.com. All Rights Reserved.</p>
                         <p className="mt-2">Disclaimer: All info provided is for informational purposes only.</p>
                     </div>
                 </div>
             </footer>
         );
 
-        const LoanPage = () => {
+        function App() {
             const [isContactOpen, setIsContactOpen] = useState(true);
             const [contactHasBeenClosed, setContactHasBeenClosed] = useState(false);
+            const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
             useEffect(() => {
                 let timer;
@@ -556,38 +662,16 @@
             const handleTalkToExpert = () => {
                 setIsContactOpen(true);
             };
+
             return (
-                <div className="min-h-screen flex flex-col bg-gray-50">
-                    <Navbar />
-                    {/* Existing Top Section */}
-                    <div className="flex-grow py-12 px-4 md:px-8 lg:px-16">
-                        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                            {/* Left Side: Form */}
-                            <div className="w-full">
-                                <LoanForm />
-                            </div>
-
-                            {/* Right Side: Marketing Images */}
-                            <div className="hidden lg:block sticky top-24">
-                                <div className="space-y-8">
-                                    <div className="relative group">
-                                        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-orange-400 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                                        <div className="relative bg-white rounded-2xl overflow-hidden shadow-xl p-8 flex flex-col items-center text-center">
-                                            <img src="/static/loans_hero_realistic.png" alt="Turning Dreams into Reality" className="w-full h-auto object-contain mb-6 transform group-hover:scale-105 transition duration-500" />
-                                            <h3 className="text-2xl font-bold text-[#052F5F] mb-3">Turning Dreams into Reality</h3>
-                                            <p className="text-gray-600 leading-relaxed">
-                                                Whether it's your dream home, growing your business, or a personal milestone, we have the perfect financial solution tailored for you.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* New Content Sections */}
-                    <LoanHeroLower />
-                    <DetailedServices />
+                <div className="font-sans text-gray-800 bg-gray-50 min-h-screen pb-0">
+                    <Navbar onSignInClick={() => setIsLoginModalOpen(true)} />
+                    <Hero onTalkToExpert={handleTalkToExpert} />
+                    <AboutPromise />
+                    <ServicesGrid />
+                    <CreditScoreBanner />
+                    <Partners />
+                    <Testimonials />
                     <Footer onContactClick={handleTalkToExpert} />
                     <FloatingContactWidget
                         isOpen={isContactOpen}
@@ -595,12 +679,16 @@
                         hasBeenClosed={contactHasBeenClosed}
                         setHasBeenClosed={setContactHasBeenClosed}
                     />
+                    <LoginModal
+                        isOpen={isLoginModalOpen}
+                        onClose={() => setIsLoginModalOpen(false)}
+                    />
                 </div>
             );
-        };
+        }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<LoanPage />);
+        root.render(<App />);
     </script>
     {% endraw %}
 </body>
