@@ -69,34 +69,50 @@
             </div>
         );
 
-        // Animated Counter Component
+        // Animated Counter Component - re-animates each time section comes into view
         const AnimatedCounter = ({ end, duration = 2000, suffix = "" }) => {
             const [count, setCount] = useState(0);
-            const [hasAnimated, setHasAnimated] = useState(false);
             const counterRef = React.useRef(null);
+            const animationRef = React.useRef(null);
 
             useEffect(() => {
                 const observer = new IntersectionObserver(
                     (entries) => {
-                        if (entries[0].isIntersecting && !hasAnimated) {
-                            setHasAnimated(true);
+                        if (entries[0].isIntersecting) {
+                            // Cancel any ongoing animation
+                            if (animationRef.current) {
+                                cancelAnimationFrame(animationRef.current);
+                            }
+                            // Reset count and start fresh animation
+                            setCount(0);
                             let startTime;
                             const animate = (currentTime) => {
                                 if (!startTime) startTime = currentTime;
                                 const progress = Math.min((currentTime - startTime) / duration, 1);
                                 setCount(Math.floor(progress * end));
                                 if (progress < 1) {
-                                    requestAnimationFrame(animate);
+                                    animationRef.current = requestAnimationFrame(animate);
                                 }
                             };
-                            requestAnimationFrame(animate);
+                            animationRef.current = requestAnimationFrame(animate);
+                        } else {
+                            // Reset count when leaving view so it animates again on next view
+                            setCount(0);
+                            if (animationRef.current) {
+                                cancelAnimationFrame(animationRef.current);
+                            }
                         }
                     },
                     { threshold: 0.5 }
                 );
                 if (counterRef.current) observer.observe(counterRef.current);
-                return () => observer.disconnect();
-            }, [end, duration, hasAnimated]);
+                return () => {
+                    observer.disconnect();
+                    if (animationRef.current) {
+                        cancelAnimationFrame(animationRef.current);
+                    }
+                };
+            }, [end, duration]);
 
             return <span ref={counterRef}>{count}{suffix}</span>;
         };
@@ -145,19 +161,19 @@
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
                                     <div className="space-y-2">
                                         <div className="text-4xl md:text-5xl font-bold">
-                                            <AnimatedCounter end={50} suffix="+" />
+                                            <AnimatedCounter end={25} suffix="+" />
                                         </div>
                                         <p className="text-blue-200 text-sm md:text-base">Partner Banks & NBFCs</p>
                                     </div>
                                     <div className="space-y-2">
                                         <div className="text-4xl md:text-5xl font-bold">
-                                            <AnimatedCounter end={10000} suffix="+" />
+                                            <AnimatedCounter end={20} suffix="+" />
                                         </div>
                                         <p className="text-blue-200 text-sm md:text-base">Happy Customers</p>
                                     </div>
                                     <div className="space-y-2">
                                         <div className="text-4xl md:text-5xl font-bold">
-                                            ₹<AnimatedCounter end={100} suffix="Cr+" />
+                                            ₹<AnimatedCounter end={300} suffix="Lakhs+" />
                                         </div>
                                         <p className="text-blue-200 text-sm md:text-base">Loans Disbursed</p>
                                     </div>
