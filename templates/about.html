@@ -48,9 +48,7 @@
                                     </a>
                                 ))}
                             </div>
-                            <button className="text-blue-600 font-bold text-sm border border-blue-600 px-5 py-2 rounded hover:bg-blue-50 transition">
-                                Sign In
-                            </button>
+
                         </div>
                     </div>
                 </nav>
@@ -71,107 +69,274 @@
             </div>
         );
 
+        // Animated Counter Component
+        const AnimatedCounter = ({ end, duration = 2000, suffix = "" }) => {
+            const [count, setCount] = useState(0);
+            const [hasAnimated, setHasAnimated] = useState(false);
+            const counterRef = React.useRef(null);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        if (entries[0].isIntersecting && !hasAnimated) {
+                            setHasAnimated(true);
+                            let startTime;
+                            const animate = (currentTime) => {
+                                if (!startTime) startTime = currentTime;
+                                const progress = Math.min((currentTime - startTime) / duration, 1);
+                                setCount(Math.floor(progress * end));
+                                if (progress < 1) {
+                                    requestAnimationFrame(animate);
+                                }
+                            };
+                            requestAnimationFrame(animate);
+                        }
+                    },
+                    { threshold: 0.5 }
+                );
+                if (counterRef.current) observer.observe(counterRef.current);
+                return () => observer.disconnect();
+            }, [end, duration, hasAnimated]);
+
+            return <span ref={counterRef}>{count}{suffix}</span>;
+        };
+
         const AboutContent = () => {
             return (
-                <div className="py-16 bg-white">
-                    <div className="mx-2 md:mx-8 lg:mx-16 space-y-16">
+                <div className="py-16 bg-gradient-to-b from-white via-blue-50/30 to-white">
+                    <div className="mx-2 md:mx-8 lg:mx-16 space-y-20">
 
-                        {/* Intro Section */}
+                        {/* Intro Section with Image */}
                         <div className="grid md:grid-cols-2 gap-12 items-center">
-                            <div className="space-y-6">
-                                <h2 className="text-3xl font-bold text-[#052F5F] leading-tight">Empowering Financial Decisions</h2>
+                            <div className="space-y-6 order-2 md:order-1">
+                                <div className="inline-block px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold mb-2">
+                                    🎯 Our Mission
+                                </div>
+                                <h2 className="text-4xl font-bold text-[#052F5F] leading-tight">
+                                    Empowering Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Financial Future</span>
+                                </h2>
                                 <p className="text-gray-600 leading-relaxed text-lg">
-                                    In today’s fast-moving financial environment, many people take loans due to urgency or immediate needs without fully understanding interest rates, EMIs, hidden charges, or long-term repayment impact. At CreditsBazaar.com, we aim to change this by putting education and transparency first.
+                                    In today's fast-moving financial environment, many people take loans due to urgency or immediate needs without fully understanding interest rates, EMIs, hidden charges, or long-term repayment impact. At CreditsBazaar.com, we aim to change this by putting <span className="font-semibold text-[#052F5F]">education and transparency first</span>.
                                 </p>
                                 <p className="text-gray-600 leading-relaxed text-lg">
-                                    Our core belief is simple: <span className="font-bold text-blue-600">an informed customer is a safe customer.</span> That is why our goal is to explain every detail clearly before you choose any lender.
+                                    Our core belief is simple: <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">an informed customer is a safe customer.</span> That is why our goal is to explain every detail clearly before you choose any lender.
                                 </p>
+                                <div className="flex flex-wrap gap-4 pt-4">
+                                    <a href="/loans" className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 shadow-lg">
+                                        Explore Loans
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                    </a>
+                                </div>
                             </div>
-                            <div className="bg-blue-50 rounded-2xl p-8 shadow-inner">
-                                <h3 className="text-xl font-bold text-[#052F5F] mb-4">Why Choose Us?</h3>
-                                <ul className="space-y-4">
-                                    <li className="flex gap-3">
-                                        <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                        <span className="text-gray-700">Connected with multiple private banks and NBFCs</span>
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                        <span className="text-gray-700">Compare loan options for the suitable solution</span>
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                        <span className="text-gray-700">Focus on guidance—not pressure</span>
-                                    </li>
-                                    <li className="flex gap-3">
-                                        <svg className="w-6 h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                        <span className="text-gray-700">Support for long-term financial stability</span>
-                                    </li>
-                                </ul>
+                            <div className="order-1 md:order-2 relative">
+                                <div className="absolute -inset-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-3xl blur-2xl opacity-20 animate-pulse"></div>
+                                <img
+                                    src="/static/about_customer_service.png"
+                                    alt="Professional Financial Advisor"
+                                    className="relative rounded-3xl shadow-2xl w-full object-cover hover:scale-[1.02] transition-transform duration-500"
+                                />
                             </div>
                         </div>
 
-                        {/* Our Services */}
+                        {/* Stats Section */}
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 rounded-3xl"></div>
+                            <div className="relative bg-[#052F5F]/90 backdrop-blur-sm rounded-3xl p-8 md:p-12">
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+                                    <div className="space-y-2">
+                                        <div className="text-4xl md:text-5xl font-bold">
+                                            <AnimatedCounter end={50} suffix="+" />
+                                        </div>
+                                        <p className="text-blue-200 text-sm md:text-base">Partner Banks & NBFCs</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="text-4xl md:text-5xl font-bold">
+                                            <AnimatedCounter end={10000} suffix="+" />
+                                        </div>
+                                        <p className="text-blue-200 text-sm md:text-base">Happy Customers</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="text-4xl md:text-5xl font-bold">
+                                            ₹<AnimatedCounter end={100} suffix="Cr+" />
+                                        </div>
+                                        <p className="text-blue-200 text-sm md:text-base">Loans Disbursed</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="text-4xl md:text-5xl font-bold">
+                                            <AnimatedCounter end={98} suffix="%" />
+                                        </div>
+                                        <p className="text-blue-200 text-sm md:text-base">Customer Satisfaction</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Why Choose Us - Glassmorphism Cards */}
+                        <div className="grid md:grid-cols-2 gap-12 items-center">
+                            <div className="relative">
+                                <div className="absolute -inset-4 bg-gradient-to-r from-purple-400 to-blue-500 rounded-3xl blur-2xl opacity-20"></div>
+                                <img
+                                    src="/static/about_team.png"
+                                    alt="Our Expert Team"
+                                    className="relative rounded-3xl shadow-2xl w-full object-cover hover:scale-[1.02] transition-transform duration-500"
+                                />
+                            </div>
+                            <div className="space-y-6">
+                                <div className="inline-block px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold mb-2">
+                                    ✨ Why Choose Us
+                                </div>
+                                <h2 className="text-4xl font-bold text-[#052F5F] leading-tight">Your Trusted Financial Partner</h2>
+                                <div className="space-y-4">
+                                    {[
+                                        { icon: "🏦", title: "Multi-Bank Network", desc: "Connected with 50+ private banks and NBFCs" },
+                                        { icon: "🔍", title: "Smart Comparison", desc: "Compare loan options to find the best solution" },
+                                        { icon: "🤝", title: "Expert Guidance", desc: "Focus on helping, not selling" },
+                                        { icon: "🛡️", title: "Long-term Support", desc: "Committed to your financial stability" }
+                                    ].map((item, idx) => (
+                                        <div key={idx} className="group flex gap-4 p-4 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform">
+                                                {item.icon}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-[#052F5F] mb-1">{item.title}</h4>
+                                                <p className="text-gray-600 text-sm">{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Our Services with Gradient Cards */}
                         <div className="text-center">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-8">Our Services</h2>
+                            <div className="inline-block px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">
+                                💼 Our Services
+                            </div>
+                            <h2 className="text-4xl font-bold text-[#052F5F] mb-4">Comprehensive Financial Solutions</h2>
+                            <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-12">We offer a wide range of loan products tailored to meet your unique financial needs</p>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                 {[
-                                    { title: "Personal Loans", icon: "M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" },
-                                    { title: "Business Loans", icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" },
-                                    { title: "Overdraft (OD)", icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-                                    { title: "Balance Transfer", icon: "M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" }
+                                    { title: "Personal Loans", icon: "M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z", gradient: "from-blue-500 to-blue-600" },
+                                    { title: "Business Loans", icon: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4", gradient: "from-purple-500 to-purple-600" },
+                                    { title: "Overdraft (OD)", icon: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z", gradient: "from-orange-500 to-orange-600" },
+                                    { title: "Balance Transfer", icon: "M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4", gradient: "from-green-500 to-green-600" }
                                 ].map((service, idx) => (
-                                    <div key={idx} className="bg-gray-50 p-6 rounded-xl hover:shadow-md transition">
-                                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
-                                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={service.icon}></path></svg>
+                                    <div key={idx} className="group relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+                                        <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                                        <div className="relative z-10">
+                                            <div className={`w-16 h-16 bg-gradient-to-br ${service.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-lg group-hover:bg-white group-hover:text-blue-600 transition-all duration-500`}>
+                                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={service.icon}></path></svg>
+                                            </div>
+                                            <h3 className="font-bold text-gray-800 group-hover:text-white transition-colors duration-500">{service.title}</h3>
                                         </div>
-                                        <h3 className="font-bold text-gray-800">{service.title}</h3>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Our Features */}
-                        <div>
-                            <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">Our Features</h2>
-                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {[
-                                    { title: "Education-First Approach", desc: "We clearly explain interest rates, EMIs, repayment structure, and loan impact before application." },
-                                    { title: "Transparent Interest Rates", desc: "No hidden charges. Complete clarity on pricing and terms." },
-                                    { title: "Multiple Lender Comparison", desc: "Compare loan options from several private banks and NBFCs in one place." },
-                                    { title: "Personalized Loan Guidance", desc: "Loan recommendations based on customer income, eligibility, and requirements." },
-                                    { title: "Simple Online Process", desc: "Easy digital application with minimal documentation." },
-                                    { title: "Fast Approval & Direct Disbursal", desc: "Quick processing with direct bank disbursal to your account." },
-                                    { title: "Safe & Responsible Borrowing", desc: "Guidance focused on long-term financial safety, not short-term selling." }
-                                ].map((feature, idx) => (
-                                    <div key={idx} className="border border-gray-100 p-6 rounded-xl hover:border-blue-100 hover:shadow-md transition bg-white">
-                                        <h3 className="font-bold text-[#052F5F] mb-2">{feature.title}</h3>
-                                        <p className="text-gray-600 text-sm">{feature.desc}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Vision & Commitment */}
-                        <div className="bg-[#052F5F] text-white rounded-3xl p-8 md:p-12 text-center md:text-left">
-                            <div className="grid md:grid-cols-2 gap-12">
-                                <div>
-                                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                                        <span className="w-8 h-1 bg-[#FF6F3C] rounded-full"></span> OUR VISION
-                                    </h2>
-                                    <p className="text-blue-100 text-lg leading-relaxed">
-                                        To educate customers and promote responsible borrowing by creating a transparent, trustworthy, and customer-first financial marketplace.
-                                    </p>
+                        {/* Technology Section */}
+                        <div className="grid md:grid-cols-2 gap-12 items-center">
+                            <div className="space-y-6 order-2 md:order-1">
+                                <div className="inline-block px-4 py-2 bg-cyan-100 text-cyan-700 rounded-full text-sm font-semibold mb-2">
+                                    🔐 Secure & Modern
                                 </div>
-                                <div>
-                                    <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                                        <span className="w-8 h-1 bg-[#FF6F3C] rounded-full"></span> OUR COMMITMENT
-                                    </h2>
-                                    <p className="text-blue-100 text-lg leading-relaxed space-y-2">
-                                        At CreditsBazaar.com, education comes before selling.
-                                    </p>
-                                    <p className="text-blue-200 mt-2">
-                                        We are committed to helping customers understand every aspect of a loan so they can borrow confidently and responsibly.
-                                    </p>
+                                <h2 className="text-4xl font-bold text-[#052F5F] leading-tight">Powered by Advanced Technology</h2>
+                                <p className="text-gray-600 leading-relaxed text-lg">
+                                    We leverage cutting-edge fintech solutions to provide you with a seamless, secure, and efficient borrowing experience. Our platform uses bank-grade encryption to protect your data.
+                                </p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {[
+                                        { icon: "🔒", text: "256-bit Encryption" },
+                                        { icon: "⚡", text: "Instant Processing" },
+                                        { icon: "📱", text: "Mobile Friendly" },
+                                        { icon: "🔄", text: "Real-time Updates" }
+                                    ].map((item, idx) => (
+                                        <div key={idx} className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm">
+                                            <span className="text-2xl">{item.icon}</span>
+                                            <span className="text-gray-700 font-medium text-sm">{item.text}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="order-1 md:order-2 relative">
+                                <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-3xl blur-2xl opacity-20"></div>
+                                <img
+                                    src="/static/about_technology.png"
+                                    alt="Secure Financial Technology"
+                                    className="relative rounded-3xl shadow-2xl w-full object-cover hover:scale-[1.02] transition-transform duration-500"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Our Features - Premium Cards */}
+                        <div>
+                            <div className="text-center mb-12">
+                                <div className="inline-block px-4 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-semibold mb-4">
+                                    ⭐ Premium Features
+                                </div>
+                                <h2 className="text-4xl font-bold text-[#052F5F] mb-4">What Sets Us Apart</h2>
+                                <p className="text-gray-600 text-lg max-w-2xl mx-auto">Experience banking services reimagined with these exclusive features</p>
+                            </div>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {[
+                                    { title: "Education-First Approach", desc: "We clearly explain interest rates, EMIs, repayment structure, and loan impact before application.", icon: "📚", color: "blue" },
+                                    { title: "Transparent Interest Rates", desc: "No hidden charges. Complete clarity on pricing and terms.", icon: "💎", color: "purple" },
+                                    { title: "Multiple Lender Comparison", desc: "Compare loan options from several private banks and NBFCs in one place.", icon: "📊", color: "green" },
+                                    { title: "Personalized Loan Guidance", desc: "Loan recommendations based on customer income, eligibility, and requirements.", icon: "🎯", color: "orange" },
+                                    { title: "Simple Online Process", desc: "Easy digital application with minimal documentation.", icon: "📱", color: "cyan" },
+                                    { title: "Fast Approval & Direct Disbursal", desc: "Quick processing with direct bank disbursal to your account.", icon: "⚡", color: "amber" },
+                                    { title: "Safe & Responsible Borrowing", desc: "Guidance focused on long-term financial safety, not short-term selling.", icon: "🛡️", color: "rose" }
+                                ].map((feature, idx) => (
+                                    <div key={idx} className={`group relative bg-white p-6 rounded-2xl border border-gray-100 hover:border-${feature.color}-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden`}>
+                                        <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-${feature.color}-100 to-transparent rounded-bl-full opacity-50`}></div>
+                                        <div className="relative z-10">
+                                            <div className="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                                                {feature.icon}
+                                            </div>
+                                            <h3 className="font-bold text-[#052F5F] mb-2 text-lg">{feature.title}</h3>
+                                            <p className="text-gray-600 text-sm leading-relaxed">{feature.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Vision & Commitment - Premium Design */}
+                        <div className="relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#052F5F] via-blue-900 to-[#052F5F]"></div>
+                            <div className="absolute inset-0 opacity-10">
+                                <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl"></div>
+                                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl"></div>
+                            </div>
+                            <div className="relative text-white rounded-3xl p-8 md:p-16 text-center md:text-left">
+                                <div className="grid md:grid-cols-2 gap-12">
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-3 justify-center md:justify-start">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-[#FF6F3C] to-orange-500 rounded-xl flex items-center justify-center text-2xl">
+                                                🔭
+                                            </div>
+                                            <h2 className="text-3xl font-bold">OUR VISION</h2>
+                                        </div>
+                                        <p className="text-blue-100 text-lg leading-relaxed">
+                                            To educate customers and promote responsible borrowing by creating a transparent, trustworthy, and customer-first financial marketplace.
+                                        </p>
+                                        <div className="h-1 w-24 bg-gradient-to-r from-[#FF6F3C] to-orange-400 rounded-full mx-auto md:mx-0"></div>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-3 justify-center md:justify-start">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-[#FF6F3C] to-orange-500 rounded-xl flex items-center justify-center text-2xl">
+                                                💪
+                                            </div>
+                                            <h2 className="text-3xl font-bold">OUR COMMITMENT</h2>
+                                        </div>
+                                        <p className="text-blue-100 text-lg leading-relaxed">
+                                            At CreditsBazaar.com, <span className="font-bold text-white">education comes before selling.</span>
+                                        </p>
+                                        <p className="text-blue-200 leading-relaxed">
+                                            We are committed to helping customers understand every aspect of a loan so they can borrow confidently and responsibly.
+                                        </p>
+                                        <div className="h-1 w-24 bg-gradient-to-r from-[#FF6F3C] to-orange-400 rounded-full mx-auto md:mx-0"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -279,7 +444,7 @@
                         <div>
                             <h4 className="text-white font-bold mb-4 uppercase">Contact</h4>
                             <ul className="space-y-2">
-                                <li>support@paisabazaar.com</li>
+                                <li>amit@creditsbazaar.com</li>
                                 <li>9625835453</li>
                                 <li className="mt-4 flex gap-4">
                                     <span className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 cursor-pointer">f</span>
@@ -290,7 +455,7 @@
                         </div>
                     </div>
                     <div className="border-t border-gray-700 pt-8 text-center text-xs">
-                        <p>&copy; 2026 Paisabazaar.com. All Rights Reserved.</p>
+                        <p>&copy; 2026 Creditsbazaar.com. All Rights Reserved.</p>
                         <p className="mt-2">Disclaimer: All info provided is for informational purposes only.</p>
                     </div>
                 </div>
