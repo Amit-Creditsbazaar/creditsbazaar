@@ -342,9 +342,24 @@
 
         const Testimonials = () => {
             const reviews = [
-                { name: "Rahul S.", rating: 5, text: "Excellent service! I got my loan approved within 24 hours. Minimal paperwork and great support." },
-                { name: "Priya M.", rating: 4, text: "Very helpful platform to compare credit cards. Found the best lifetime free card for my needs here." },
-                { name: "Amit K.", rating: 5, text: "Checking credit score is so easy and detailed. The monthly updates help me track my financial health." }
+                {
+                    name: "Mukesh Singh Naruka",
+                    location: "Alwar",
+                    rating: 5,
+                    text: "I had a great experience with you as well CreditsBazaar.com for the disbursement of my personal loan. The entire process was smooth, quick, and handled with minimal queries, exactly as per my requirement. The team was supportive and professional throughout the process. I would definitely recommend Mr. Amit & CreditsBazaar.com for processing personal loan applications."
+                },
+                {
+                    name: "Kuppala Kirankumar",
+                    location: "Bangalore",
+                    rating: 5,
+                    text: "I recently took a loan from your company and had a very smooth experience throughout the process. The application and approval were quick, transparent, and hassle-free. Your staff was supportive and clearly explained all terms and conditions. The disbursement was timely, and the service exceeded my expectations."
+                },
+                {
+                    name: "Sumit Panchal",
+                    location: "Delhi",
+                    rating: 5,
+                    text: "My experience with CreditsBazaar.com for a personal loan was excellent. The entire process was fast, clear, and hassle-free. The team was helpful and highly professional. I would strongly recommend CreditsBazaar.com."
+                }
             ];
             return (
                 <div className="py-16 bg-white">
@@ -355,10 +370,15 @@
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {reviews.map((review, i) => (
-                                <div key={i} className="bg-gray-50 p-8 rounded-xl relative">
+                                <div key={i} className="bg-gray-50 p-8 rounded-xl relative hover:shadow-lg transition duration-300 flex flex-col h-full">
                                     <div className="text-yellow-400 text-2xl mb-4">{"★".repeat(review.rating)}</div>
-                                    <p className="text-gray-600 italic mb-6">"{review.text}"</p>
-                                    <div className="font-bold text-gray-800">- {review.name}</div>
+                                    <p className="text-gray-600 italic mb-6 flex-grow leading-relaxed">"{review.text}"</p>
+                                    <div className="mt-auto">
+                                        <div className="font-bold text-[#052F5F] text-lg">{review.name}</div>
+                                        {review.location && (
+                                            <div className="text-sm text-gray-500">{review.location}</div>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -605,7 +625,7 @@
                         <div>
                             <h4 className="text-white font-bold mb-4 uppercase">Contact</h4>
                             <ul className="space-y-2">
-                                <li>support@paisabazaar.com</li>
+                                <li>amit@creditsbazaar.com</li>
                                 <li>9625835453</li>
                                 <li className="mt-4 flex gap-4">
                                     <span className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 cursor-pointer">f</span>
@@ -616,7 +636,7 @@
                         </div>
                     </div>
                     <div className="border-t border-gray-700 pt-8 text-center text-xs">
-                        <p>&copy; 2026 Paisabazaar.com. All Rights Reserved.</p>
+                        <p>&copy; 2026 Creditsbazaar.com. All Rights Reserved.</p>
                         <p className="mt-2">Disclaimer: All info provided is for informational purposes only.</p>
                     </div>
                 </div>
