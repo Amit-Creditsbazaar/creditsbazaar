@@ -554,7 +554,7 @@
                             >
                                 <div className="flex flex-col items-center gap-2">
                                     <span className="text-xs font-bold writing-mode-vertical transform rotate-180" style={{ writingMode: 'vertical-rl' }}>
-                                        CONTACT
+                                        CONTACT US
                                     </span>
                                 </div>
                             </div>
@@ -705,7 +705,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-white font-bold mb-4 uppercase">Contact</h4>
+                            <h4 className="text-white font-bold mb-4 uppercase">Contact Us</h4>
                             <ul className="space-y-2">
                                 <li>amit@creditsbazaar.com</li>
                                 <li>9625835453</li>
@@ -738,6 +738,25 @@
             const [isContactOpen, setIsContactOpen] = useState(false);
             const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+            // Check for existing admin session on load
+            useEffect(() => {
+                const checkGlobalAuth = async () => {
+                    try {
+                        const response = await fetch('/admin/check_auth');
+                        if (response.ok) {
+                            // If response is HTML (redirected to home), json() will fail, which is good
+                            const data = await response.json();
+                            if (data.authenticated) {
+                                window.location.href = '/admin/dashboard';
+                            }
+                        }
+                    } catch (error) {
+                        // User is not logged in or token is invalid
+                    }
+                };
+                checkGlobalAuth();
+            }, []);
+
             // Handle hash anchor scrolling after component mounts
             useEffect(() => {
                 if (window.location.hash) {
@@ -755,9 +774,27 @@
                 setIsContactOpen(true);
             };
 
+            const handleSignInClick = async () => {
+                try {
+                    // Check if already authenticated via JWT cookie
+                    const response = await fetch('/admin/check_auth');
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.authenticated) {
+                            window.location.href = '/admin/dashboard';
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Auth check failed", error);
+                }
+                // If not authenticated or error, show login modal
+                setIsLoginModalOpen(true);
+            };
+
             return (
                 <div className="font-sans text-gray-800 bg-gray-50 min-h-screen pb-0">
-                    <Navbar onSignInClick={() => setIsLoginModalOpen(true)} />
+                    <Navbar onSignInClick={handleSignInClick} />
                     <Hero onTalkToExpert={handleTalkToExpert} />
                     <AboutPromise />
                     <ServicesGrid />
