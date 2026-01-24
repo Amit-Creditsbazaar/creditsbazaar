@@ -121,7 +121,7 @@
                     <div className="md:w-1/2 space-y-8">
                         <div>
                             <h1 className="text-4xl md:text-6xl font-bold text-[#052F5F] leading-tight mt-2">
-                                Financial Wellness starts with the <span className="text-blue-600">Right Advice</span>.
+                                Financial Wellness starts with the <span className="text-blue-600">Right Advice</span>
                             </h1>
                         </div>
                         <p className="text-gray-600 text-lg md:max-w-xl leading-relaxed">We aren't just a platform; we’re your partner in making healthier financial choices. Compare, choose, and apply for the best financial products.</p>
@@ -317,7 +317,7 @@
             ];
 
             return (
-                <div className="py-16 bg-white border-t border-gray-100">
+                <div id="partners" className="py-16 bg-white border-t border-gray-100">
                     <div className="mx-2 md:mx-8 lg:mx-16">
                         <div className="text-center mb-10">
                             <h2 className="text-2xl font-bold text-gray-800">Our Partners</h2>
@@ -599,27 +599,26 @@
                             <h4 className="text-white font-bold mb-4 uppercase">Company</h4>
                             <ul className="space-y-2">
                                 <li className="hover:text-white cursor-pointer"><a href="/about">About Us</a></li>
-                                <li className="hover:text-white cursor-pointer">Partners</li>
-                                <li className="hover:text-white cursor-pointer">Careers</li>
+                                <li className="hover:text-white cursor-pointer"><a href="/#partners">Partners</a></li>
                                 <li className="hover:text-white cursor-pointer" onClick={onContactClick}>Contact Us</li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-white font-bold mb-4 uppercase">Services</h4>
                             <ul className="space-y-2">
-                                <li className="hover:text-white cursor-pointer">Personal Loan</li>
-                                <li className="hover:text-white cursor-pointer">Credit Card</li>
-                                <li className="hover:text-white cursor-pointer">Mutual Funds</li>
-                                <li className="hover:text-white cursor-pointer">Credit Score</li>
+                                <li className="hover:text-white cursor-pointer"><a href="/loans">Personal Loan</a></li>
+                                <li className="hover:text-white cursor-pointer"><a href="/loans">Home Loan</a></li>
+                                <li className="hover:text-white cursor-pointer"><a href="/loans">Business Loan</a></li>
+                                <li className="hover:text-white cursor-pointer"><a href="/creditcards">Credit Card</a></li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-white font-bold mb-4 uppercase">Resources</h4>
                             <ul className="space-y-2">
-                                <li className="hover:text-white cursor-pointer">Financial Tools</li>
+                                <li className="hover:text-white cursor-pointer"><a href="/calculators">Financial Tools</a></li>
                                 <li className="hover:text-white cursor-pointer">Blogs</li>
-                                <li className="hover:text-white cursor-pointer">FAQs</li>
-                                <li className="hover:text-white cursor-pointer">Glossary</li>
+                                <li className="hover:text-white cursor-pointer"><a href="/faq">FAQs</a></li>
+                                <li className="hover:text-white cursor-pointer"><a href="/glossary">Glossary</a></li>
                             </ul>
                         </div>
                         <div>
@@ -628,9 +627,11 @@
                                 <li>amit@creditsbazaar.com</li>
                                 <li>9625835453</li>
                                 <li className="mt-4 flex gap-4">
-                                    <span className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 cursor-pointer">f</span>
-                                    <span className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-400 cursor-pointer">t</span>
-                                    <span className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 cursor-pointer">i</span>
+                                    <a href="https://www.instagram.com/official_creditsbazaar?igsh=MW5iaWQ1OTkxemFncQ==" target="_blank" rel="noopener noreferrer" className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 cursor-pointer transition-colors block">
+                                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clipRule="evenodd" />
+                                        </svg>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -658,6 +659,19 @@
                 }
                 return () => clearTimeout(timer);
             }, [isContactOpen]);
+
+            // Handle hash anchor scrolling after component mounts
+            useEffect(() => {
+                if (window.location.hash) {
+                    const id = window.location.hash.substring(1);
+                    setTimeout(() => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 100);
+                }
+            }, []);
 
             const handleTalkToExpert = () => {
                 setIsContactOpen(true);
