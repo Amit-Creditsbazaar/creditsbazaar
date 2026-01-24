@@ -516,8 +516,209 @@
                                             </p>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        {/* New Content Section */}
+                        <div className="max-w-7xl mx-auto mt-12 md:mt-24">
+                            <div className="bg-white rounded-[2rem] shadow-xl border border-gray-100 p-8 md:p-14 overflow-hidden relative">
+                                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#052F5F] via-blue-600 to-[#FF6F3C]"></div>
 
+                                <h1 className="text-3xl md:text-5xl font-extrabold text-[#052F5F] mb-8 text-center tracking-tight leading-tight">
+                                    Credit Card <span className="text-gray-400 font-light">|</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-blue-500">Apply Online</span>
+                                </h1>
+                                <p className="text-gray-600 leading-relaxed text-lg md:text-xl mb-16 text-center max-w-4xl mx-auto">
+                                    Unlock financial freedom with Credits Bazaar. We guide you to the <span className="font-semibold text-[#052F5F]">perfect credit card</span> tailored to your lifestyle—offering maximum rewards, seamless approval, and exclusive privileges.
+                                </p>
+
+                                {/* What is a Credit Card Section */}
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+                                    <div className="order-2 lg:order-1">
+                                        <div className="relative pl-6 border-l-4 border-[#FF6F3C]">
+                                            <h2 className="text-3xl font-bold text-[#052F5F] mb-6">What is a Credit Card?</h2>
+                                            <p className="text-gray-600 leading-relaxed mb-6 text-lg">
+                                                A credit card is more than just a payment tool; it's your financial power-up. It allows you to borrow funds up to a set limit for immediate purchases, giving you the flexibility to pay later.
+                                            </p>
+                                            <p className="text-[#052F5F] font-semibold text-lg">
+                                                Experience convenience, security, and financial flexibility like never before.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="order-1 lg:order-2 flex justify-center">
+                                        <div className="relative">
+                                            <div className="absolute -inset-4 bg-blue-100 rounded-full blur-2xl opacity-50"></div>
+                                            <img src="/static/credit_card_benefits.png" alt="Credit Card Benefits" className="relative rounded-2xl shadow-2xl hover:scale-[1.02] transition duration-500 transform" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Benefits Section */}
+                                <div className="mb-20">
+                                    <h2 className="text-3xl font-bold text-[#052F5F] mb-10 text-center">Benefits of Using a Credit Card</h2>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                        {[
+                                            "Instant Liquidity",
+                                            "Reward Points",
+                                            "Cashback Offers",
+                                            "Lounge Access",
+                                            "Fuel Waiver",
+                                            "EMI Options",
+                                            "Credit Building",
+                                            "Secure Pay"
+                                        ].map((benefit, index) => (
+                                            <div key={index} className="group flex flex-col items-center justify-center p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                                                <div className="w-12 h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mb-4 group-hover:w-20 transition-all duration-300"></div>
+                                                <span className="text-gray-800 font-bold text-lg text-center group-hover:text-blue-700 transition-colors">{benefit}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Types of Cards */}
+                                <div className="mb-24">
+                                    <div className="text-center mb-12">
+                                        <h2 className="text-3xl font-bold text-[#052F5F] mb-4">Curated Cards for Every Lifestyle</h2>
+                                        <p className="text-gray-500">Choose the card that fits your world.</p>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {[
+                                            { title: "Lifestyle", desc: "Dining, entertainment & shopping perks.", color: "from-purple-500 to-indigo-500" },
+                                            { title: "Travel", desc: "Miles, hotels & airport lounge access.", color: "from-blue-400 to-cyan-400" },
+                                            { title: "Fuel", desc: "Surcharge waivers & fuel cashback.", color: "from-orange-400 to-red-400" },
+                                            { title: "Cashback", desc: "Money back on every spend.", color: "from-emerald-400 to-green-500" },
+                                            { title: "Business", desc: "High limits & expense management.", color: "from-gray-700 to-gray-900" },
+                                            { title: "Shopping", desc: "Exclusive discounts on top brands.", color: "from-pink-500 to-rose-500" }
+                                        ].map((card, index) => (
+                                            <div key={index} className="relative group bg-white p-8 rounded-2xl border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                                                <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${card.color}`}></div>
+                                                <h3 className="font-bold text-2xl text-[#052F5F] mb-3 group-hover:translate-x-2 transition-transform duration-300">{card.title}</h3>
+                                                <p className="text-gray-600">{card.desc}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Eligibility & Docs (Split View) */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-24">
+                                    <div className="bg-blue-50/50 p-10 rounded-3xl">
+                                        <h2 className="text-2xl font-bold text-[#052F5F] mb-8 flex items-center gap-3">
+                                            <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">01</span>
+                                            Eligibility Criteria
+                                        </h2>
+                                        <ul className="space-y-4">
+                                            {[
+                                                "Age: 21 to 60 years",
+                                                "Income: ₹15k – ₹25k / month",
+                                                "Credit Score: 650+",
+                                                "Stable Income Source"
+                                            ].map((item, i) => (
+                                                <li key={i} className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
+                                                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                                    <span className="text-gray-700 font-medium">{item}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    <div className="bg-orange-50/50 p-10 rounded-3xl">
+                                        <h2 className="text-2xl font-bold text-[#052F5F] mb-8 flex items-center gap-3">
+                                            <span className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold">02</span>
+                                            Documents Required
+                                        </h2>
+                                        <ul className="space-y-4">
+                                            {[
+                                                "Identity Proof (Aadhaar/PAN)",
+                                                "Address Proof",
+                                                "Income Proof (Salary Slip/ITR)",
+                                                "Bank Statements"
+                                            ].map((item, i) => (
+                                                <li key={i} className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
+                                                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                                                    <span className="text-gray-700 font-medium">{item}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                {/* Process Steps */}
+                                <div className="mb-24">
+                                    <h2 className="text-3xl font-bold text-[#052F5F] mb-12 text-center">Seamless Application Process</h2>
+                                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                                        {/* Connecting Line (Desktop) */}
+                                        <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-gray-200 -z-10"></div>
+
+                                        {[
+                                            "Fill Form",
+                                            "Submit Docs",
+                                            "Check Eligibility",
+                                            "Select Offer",
+                                            "Get Approval"
+                                        ].map((step, index) => (
+                                            <div key={index} className="flex flex-col items-center text-center group">
+                                                <div className="w-16 h-16 rounded-full bg-white border-4 border-[#FF6F3C] text-[#FF6F3C] font-extrabold flex items-center justify-center mb-6 text-xl shadow-md group-hover:bg-[#FF6F3C] group-hover:text-white transition-all duration-300 z-10">
+                                                    {index + 1}
+                                                </div>
+                                                <h4 className="font-bold text-[#052F5F] mb-2">{step}</h4>
+                                                <p className="text-xs text-gray-500 px-4">Simple & Fast</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Why Choose Us */}
+                                <div className="mb-24 bg-[#052F5F] text-white rounded-3xl p-10 md:p-16 text-center relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#FF6F3C] opacity-10 rounded-full -ml-32 -mb-32 blur-3xl"></div>
+
+                                    <h2 className="text-3xl font-bold mb-10 relative z-10">Why Credits Bazaar?</h2>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-8 relative z-10">
+                                        {[
+                                            "Zero Fees",
+                                            "Fast Approval",
+                                            "Top Banks",
+                                            "Best Deals",
+                                            "Secure Data",
+                                            "Financial Expert"
+                                        ].map((reason, index) => (
+                                            <div key={index} className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10 hover:bg-white/20 transition duration-300">
+                                                <span className="font-semibold">{reason}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Bank Partners */}
+                                <div className="mb-20">
+                                    <p className="text-center text-gray-500 mb-8 tracking-widest text-sm font-semibold">Lenders Available Through Partner DSAs</p>
+                                    <div className="flex flex-wrap justify-center gap-4">
+                                        {[
+                                            "HDFC Bank", "ICICI Bank", "Axis Bank",
+                                            "SBI Card", "Yes Bank", "IndusInd Bank", "Kotak"
+                                        ].map((bank, i) => (
+                                            <span key={i} className="px-6 py-3 bg-white rounded-full text-gray-600 font-bold shadow-sm border border-gray-100 hover:border-blue-200 hover:text-blue-600 transition-colors cursor-default">
+                                                {bank}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* FAQs */}
+                                <div>
+                                    <h2 className="text-3xl font-bold text-[#052F5F] mb-10 text-center">Frequently Asked Questions</h2>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {[
+                                            { q: "Low CIBIL Score?", a: "Yes, we have options for every score range." },
+                                            { q: "Approval Time?", a: "Typically 24-48 hours depending on verification." },
+                                            { q: "Annual Fees?", a: "Ranges from Lifetime Free to Premium cards." },
+                                            { q: "Documents Needed?", a: "Basic KYC and Income proof is sufficient." }
+                                        ].map((faq, index) => (
+                                            <div key={index} className="p-6 bg-gray-50 rounded-2xl hover:bg-white hover:shadow-lg transition-all duration-300">
+                                                <h3 className="font-bold text-[#052F5F] text-lg mb-2">{faq.q}</h3>
+                                                <p className="text-gray-600">{faq.a}</p>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
