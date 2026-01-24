@@ -140,6 +140,14 @@ def calculators_page():
          return render_template('calculators.html')
     return "Calculators page not found", 404
 
+@app.route('/glossary')
+def glossary_page():
+     return render_template('glossary.html')
+
+@app.route('/faq')
+def faq_page():
+     return render_template('faq.html')
+
 # Static file serving (for images inside static folder)
 @app.route('/static/<path:filename>')
 def serve_static(filename):
