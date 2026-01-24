@@ -16,6 +16,8 @@ app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # Configuration
 app.config['SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'default-secret-key')
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False  # Disabled for simplicity as per plan
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'default-secret-key')
 app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost')
 app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'root')
@@ -25,6 +27,19 @@ app.config['ADMIN_EMAIL'] = os.getenv('ADMIN_EMAIL', 'admin@creditbazaar.com')
 app.config['ADMIN_PASSWORD'] = os.getenv('ADMIN_PASSWORD', 'admin123')
 
 jwt = JWTManager(app)
+
+# JWT Error Loaders - Redirect to Landing Page if Invalid/Unauthorized
+@jwt.unauthorized_loader
+def unauthorized_callback(callback):
+    return redirect(url_for('home'))
+
+@jwt.invalid_token_loader
+def invalid_token_callback(callback):
+    return redirect(url_for('home'))
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    return redirect(url_for('home'))
 
 # Database connection helper
 def get_db_connection():
@@ -122,14 +137,7 @@ def init_db():
 with app.app_context():
     init_db()
 
-# Admin login required decorator
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'admin_logged_in' not in session:
-            return redirect(url_for('home'))
-        return f(*args, **kwargs)
-    return decorated_function
+# Removed custom login_required decorator in favor of @jwt_required()
 
 # Routes
 @app.route('/')
@@ -314,7 +322,9 @@ def apply_credit_card():
         cursor.close()
         conn.close()
 
-# Admin Routes - Login (AJAX only, modal on homepage)
+# Admin Routes - Login using JWT (Cookies)
+from flask_jwt_extended import  set_access_cookies, unset_jwt_cookies
+
 @app.route('/admin/login', methods=['POST'])
 def admin_login():
     data = request.json
@@ -322,14 +332,23 @@ def admin_login():
     password = data.get('password')
     
     if email == app.config['ADMIN_EMAIL'] and password == app.config['ADMIN_PASSWORD']:
-        session['admin_logged_in'] = True
-        session['admin_email'] = email
-        return jsonify({'success': True, 'redirect': '/admin/dashboard'}), 200
+        # Create JWT token
+        access_token = create_access_token(identity=email)
+        
+        # Set token in cookies
+        resp = jsonify({'success': True, 'redirect': '/admin/dashboard'})
+        set_access_cookies(resp, access_token)
+        return resp, 200
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
+@app.route('/admin/check_auth')
+@jwt_required()
+def check_auth():
+    return jsonify({'authenticated': True}), 200
+
 @app.route('/admin/dashboard')
-@login_required
+@jwt_required()
 def admin_dashboard():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -352,7 +371,7 @@ def admin_dashboard():
                          credit_card_count=credit_card_count)
 
 @app.route('/admin/leads')
-@login_required
+@jwt_required()
 def admin_leads():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -375,7 +394,7 @@ def admin_leads():
     return render_template('admin_leads.html', leads=all_leads)
 
 @app.route('/admin/export/csv')
-@login_required
+@jwt_required()
 def export_csv():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -420,7 +439,7 @@ def export_csv():
     return output
 
 @app.route('/admin/jobs')
-@login_required
+@jwt_required()
 def admin_jobs():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -431,7 +450,7 @@ def admin_jobs():
     return render_template('admin_jobs.html', jobs=jobs)
 
 @app.route('/admin/jobs/add', methods=['POST'])
-@login_required
+@jwt_required()
 def admin_add_job():
     data = request.json
     title = data.get('title')
@@ -460,7 +479,7 @@ def admin_add_job():
         conn.close()
 
 @app.route('/admin/jobs/delete/<int:job_id>', methods=['DELETE'])
-@login_required
+@jwt_required()
 def admin_delete_job(job_id):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -477,9 +496,9 @@ def admin_delete_job(job_id):
 
 @app.route('/admin/logout')
 def admin_logout():
-    session.pop('admin_logged_in', None)
-    session.pop('admin_email', None)
-    return redirect(url_for('home'))
+    resp = redirect(url_for('home'))
+    unset_jwt_cookies(resp)
+    return resp
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
