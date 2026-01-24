@@ -194,6 +194,14 @@ def careers_page():
 def serve_static(filename):
     return send_from_directory(app.static_folder, filename)
 
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(app.static_folder, 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory(app.static_folder, 'sitemap.xml')
+
 # API Routes
 @app.route('/api/signup', methods=['POST'])
 def signup():
