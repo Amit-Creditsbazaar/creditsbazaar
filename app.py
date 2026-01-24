@@ -98,6 +98,21 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
+
+        # Create Job Openings table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS job_openings (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                department VARCHAR(255) NOT NULL,
+                location VARCHAR(255) DEFAULT 'Remote / Hybrid',
+                type VARCHAR(50) DEFAULT 'Full-time',
+                description TEXT,
+                responsibilities TEXT,
+                requirements TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
         
         conn.commit()
         cursor.close()
@@ -144,9 +159,35 @@ def calculators_page():
 def glossary_page():
      return render_template('glossary.html')
 
+@app.route('/terms-condition')
+def terms_condition_page():
+     return render_template('terms_condition.html')
+
+@app.route('/disclaimer')
+def disclaimer_page():
+     return render_template('disclaimer.html')
+
+@app.route('/privacy-policy')
+def privacy_policy_page():
+     return render_template('privacy_policy.html')
+
 @app.route('/faq')
 def faq_page():
      return render_template('faq.html')
+
+@app.route('/contact')
+def contact_page():
+    return render_template('contact.html')
+
+@app.route('/careers')
+def careers_page():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM job_openings ORDER BY created_at DESC")
+    jobs = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('careers.html', jobs=jobs)
 
 # Static file serving (for images inside static folder)
 @app.route('/static/<path:filename>')
@@ -369,6 +410,62 @@ def export_csv():
     output.headers["Content-Disposition"] = "attachment; filename=leads_export.csv"
     output.headers["Content-type"] = "text/csv"
     return output
+
+@app.route('/admin/jobs')
+@login_required
+def admin_jobs():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM job_openings ORDER BY created_at DESC")
+    jobs = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('admin_jobs.html', jobs=jobs)
+
+@app.route('/admin/jobs/add', methods=['POST'])
+@login_required
+def admin_add_job():
+    data = request.json
+    title = data.get('title')
+    department = data.get('department')
+    location = data.get('location', 'Remote / Hybrid')
+    job_type = data.get('type', 'Full-time')
+    responsibilities = data.get('responsibilities', '')
+    requirements = data.get('requirements', '')
+    
+    if not title or not department:
+         return jsonify({'error': 'Title and Department are required'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            INSERT INTO job_openings (title, department, location, type, responsibilities, requirements)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        ''', (title, department, location, job_type, responsibilities, requirements))
+        conn.commit()
+        return jsonify({'success': True}), 201
+    except mysql.connector.Error as err:
+        return jsonify({'error': str(err)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/admin/jobs/delete/<int:job_id>', methods=['DELETE'])
+@login_required
+def admin_delete_job(job_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM job_openings WHERE id = %s", (job_id,))
+        conn.commit()
+        return jsonify({'success': True}), 200
+    except mysql.connector.Error as err:
+        return jsonify({'error': str(err)}), 500
+    finally:
+         cursor.close()
+         conn.close()
+
 
 @app.route('/admin/logout')
 def admin_logout():
