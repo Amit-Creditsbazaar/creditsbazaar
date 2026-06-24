@@ -1,0 +1,104 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Leads Management{% endblock %}
+{% block page_title %}Leads Management{% endblock %}
+{% block page_subtitle %}View and manage all application leads{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h3 class="text-xl font-bold text-[#052F5F]">All Leads ({{ leads|length }})</h3>
+            <p class="text-sm text-gray-500 mt-1">Complete list of loan and credit card applications</p>
+        </div>
+        <a href="/admin/export/csv"
+            class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition shadow-lg transform hover:scale-105">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                </path>
+            </svg>
+            Export CSV
+        </a>
+    </div>
+
+    {% if leads %}
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="border-b-2 border-gray-200">
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">ID</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Type</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Name</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Email</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Contact</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Company</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Salary</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Product</th>
+                    <th class="text-left py-4 px-4 font-bold text-gray-700 text-sm uppercase tracking-wide">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lead in leads %}
+                <tr class="border-b border-gray-100 hover:bg-blue-50 transition">
+                    <td class="py-4 px-4 text-sm text-gray-600">{{ lead.id }}</td>
+                    <td class="py-4 px-4">
+                        {% if lead.type == 'Loan' %}
+                        <span
+                            class="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z">
+                                </path>
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            Loan
+                        </span>
+                        {% else %}
+                        <span
+                            class="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
+                                <path fill-rule="evenodd"
+                                    d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            Credit Card
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="py-4 px-4 text-sm font-semibold text-gray-800">{{ lead.customer_name }}</td>
+                    <td class="py-4 px-4 text-sm text-gray-600">{{ lead.email }}</td>
+                    <td class="py-4 px-4 text-sm text-gray-600">{{ lead.contact_no }}</td>
+                    <td class="py-4 px-4 text-sm text-gray-600">{{ lead.company_name or '-' }}</td>
+                    <td class="py-4 px-4 text-sm text-gray-600">{{ lead.annual_salary }}</td>
+                    <td class="py-4 px-4 text-sm text-gray-600">
+                        {% if lead.type == 'Loan' %}
+                        {{ lead.loan_type or '-' }}
+                        {% else %}
+                        {{ lead.card_type or '-' }}
+                        {% endif %}
+                    </td>
+                    <td class="py-4 px-4 text-sm text-gray-500">
+                        {{ lead.created_at.strftime('%b %d, %Y') if lead.created_at else '-' }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-12">
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+            </path>
+        </svg>
+        <h3 class="text-xl font-bold text-gray-600 mb-2">No Leads Yet</h3>
+        <p class="text-gray-500">Leads from loan and credit card applications will appear here.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
